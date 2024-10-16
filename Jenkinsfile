@@ -1,38 +1,32 @@
 pipeline {
-
     agent any
-    stages {
-        stages('Build Maven'){
+    tools{
+        maven 'Maven3'
+    }
+    stages{
+        stage('Build Maven'){
             steps{
-              checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/django123/jenkins-docker-automation.git']]])
-              sh 'mvn clean install'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/django123/jenkins-docker-automation.git']]])
+                sh 'mvn clean install'
             }
         }
-
-        stage('Build Docker image'){
-
+        stage('Build docker image'){
             steps{
                 script{
                     sh 'docker build -t jenkins-docker-automation .'
                 }
             }
-
         }
-        stage('Push image to Docker Hub'){
+        stage('Push image to Hub'){
             steps{
-
-                script {
-                   // Se connecter à Docker Hub (nécessite des identifiants Jenkins pour Docker Hub)
-                    withCredentials([string(credentialsId: 'dockerhub-credentials', variable: 'dockerhub-credentials')]) {
-                          sh 'docker login -u django91 -p ${dockerhub-credentials}'
-                    }
-                           sh 'docker push jenkins-docker-automation'
-
+                script{
+                   withCredentials([string(credentialsId: 'dockerhub-credentials', variable: 'dockerhub-credentials')]) {
+                      sh 'docker login -u javatechie -p ${dockerhubpwd}'
+                   }
+                   sh 'docker push jenkins-docker-automation'
                 }
             }
-
         }
+
     }
-
-
 }
