@@ -20,8 +20,8 @@ pipeline {
         stage('Push image to Hub'){
             steps{
                 script{
-                   withCredentials([string(credentialsId: 'dockerhub-credentials', variable: 'dockerhub-credentials')]) {
-                      sh 'docker login -u javatechie -p ${dockerhub-credentials}'
+                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerpwd')]) {
+                      sh 'docker login -u django91 -p ${dockerpwd}'
                    }
                    sh 'docker push jenkins-docker-automation'
                 }
