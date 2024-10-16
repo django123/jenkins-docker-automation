@@ -21,7 +21,7 @@ pipeline {
             steps{
                 script{
                    withCredentials([string(credentialsId: 'dockerhub-credentials', variable: 'dockerhub-credentials')]) {
-                      sh 'docker login -u javatechie -p ${dockerhubpwd}'
+                      sh 'docker login -u javatechie -p ${dockerhub-credentials}'
                    }
                    sh 'docker push jenkins-docker-automation'
                 }
